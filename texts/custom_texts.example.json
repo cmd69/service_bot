@@ -1,0 +1,143 @@
+{
+  "bot": {
+    "name": "JellyBot",
+    "description": "Bot de servicios premium con opciones de suscripción",
+    "version": "1.0.0"
+  },
+  "welcome": {
+    "title": "🤖 ¡Hola! Soy {bot_name}",
+    "description": "Bienvenido al bot de servicios premium con opciones de suscripción.",
+    "features": [
+      "Acceso a servicios premium exclusivos",
+      "Gestión de suscripciones personalizada", 
+      "Soporte para múltiples métodos de pago",
+      "Verificación automática de transacciones",
+      "Soporte técnico especializado"
+    ],
+    "instructions": "Selecciona una opción del menú:"
+  },
+  "subscription": {
+    "menu_title": "📋 Mi Suscripción",
+    "menu_description": "Aquí puedes gestionar tu suscripción y acceder a los servicios premium.",
+    "options": [
+      "Consultar el estado de tu suscripción",
+      "Ver tus credenciales de acceso",
+      "Obtener enlace al grupo premium"
+    ],
+    "check_title": "🔍 Estado de tu Suscripción",
+    "no_subscription": "❌ Sin suscripción activa",
+    "credentials_title": "🔑 Tus Credenciales de Acceso",
+    "group_access_title": "👥 Acceso al Grupo Premium"
+  },
+  "plans": {
+    "title": "📊 Planes Disponibles",
+    "basic": {
+      "name": "Plan Básico",
+      "price": "$10/mes",
+      "features": [
+        "Acceso básico a servicios premium",
+        "Soporte por email",
+        "Actualizaciones semanales"
+      ]
+    },
+    "premium": {
+      "name": "Plan Premium",
+      "price": "$25/mes", 
+      "features": [
+        "Acceso completo a servicios premium",
+        "Soporte prioritario",
+        "Actualizaciones diarias",
+        "Análisis avanzado"
+      ]
+    },
+    "vip": {
+      "name": "Plan VIP",
+      "price": "$50/mes",
+      "features": [
+        "Acceso VIP completo a todos los servicios",
+        "Soporte 24/7",
+        "Actualizaciones en tiempo real",
+        "Análisis personalizado",
+        "Consultas directas con expertos"
+      ]
+    },
+    "payment_methods": [
+      "BSC (Binance Smart Chain)",
+      "TRON",
+      "Verificación automática"
+    ],
+    "renewal_info": "**🔄 Renovación:** Las suscripciones se renuevan manualmente por el usuario. Puedes cancelar en cualquier momento desde tu panel de suscripción."
+  },
+  "help": {
+    "title": "❓ Ayuda de {bot_name}",
+    "description": "{bot_name} es un bot que te permite acceder a servicios premium mediante suscripciones flexibles.",
+    "commands": [
+      "/start - Iniciar el bot y mostrar menú principal",
+      "/help - Mostrar esta ayuda"
+    ],
+    "process": [
+      "Selecciona 'Suscribirse' en el menú principal",
+      "Elige el plan que mejor se adapte a ti",
+      "Realiza el pago con criptomonedas",
+      "Verifica tu transacción automáticamente", 
+      "Obtén acceso inmediato a los servicios premium"
+    ],
+    "networks": [
+      "BSC (Binance Smart Chain)",
+      "TRON",
+      "Verificación automática"
+    ],
+    "contact_title": "📞 Contactar Soporte",
+    "contact_description": "¿Necesitas ayuda? Envía un mensaje y te responderemos lo antes posible.",
+    "tutorial_title": "📖 Tutorial de {bot_name}",
+    "tutorial_steps": [
+      "**Paso 1:** Usa /start para comenzar",
+      "**Paso 2:** Explora los planes disponibles",
+      "**Paso 3:** Selecciona el plan que mejor se adapte a ti",
+      "**Paso 4:** Realiza el pago con criptomonedas",
+      "**Paso 5:** ¡Disfruta de los servicios premium!"
+    ],
+    "faq_title": "❓ Preguntas Frecuentes",
+    "faq_items": [
+      {
+        "question": "¿Cómo funciona el pago?",
+        "answer": "Aceptamos pagos en BSC y TRON. El proceso es automático y seguro."
+      },
+      {
+        "question": "¿Puedo cambiar de plan?",
+        "answer": "Sí, puedes cambiar de plan en cualquier momento desde tu panel de suscripción."
+      },
+      {
+        "question": "¿Qué incluye cada plan?",
+        "answer": "Cada plan incluye diferentes niveles de acceso y servicios. Consulta la sección de planes para más detalles."
+      }
+    ]
+  },
+  "subscribe": {
+    "title": "💳 Suscribirse",
+    "coming_soon": "¡Próximamente disponible!",
+    "description": "El proceso de suscripción incluirá:",
+    "process": [
+      "**1. Selección de Plan**\n• Plan Básico - $10/mes\n• Plan Premium - $25/mes\n• Plan VIP - $50/mes",
+      "**2. Verificación de Pago**\n• Soporte para BSC (Binance Smart Chain)\n• Soporte para TRON\n• Verificación automática de transacciones",
+      "**3. Activación Automática**\n• Acceso inmediato al grupo premium\n• Credenciales de acceso\n• Notificaciones de confirmación"
+    ],
+    "stay_tuned": "¡Mantente atento a las actualizaciones!"
+  },
+  "buttons": {
+    "my_subscription": "Mi Suscripción 📋",
+    "subscribe": "Suscribirse 💳",
+    "help": "Ayuda ❓",
+    "view_plans": "Consultar Planes 📊",
+    "back_to_main": "Volver al Menú Principal ⬅️",
+    "contact_support": "Contactar 📞",
+    "tutorial": "Tutorial 📖",
+    "faq": "FAQ ❓",
+    "check_subscription": "Consultar Suscripción 🔍",
+    "view_credentials": "Ver Credenciales 🔑",
+    "group_access": "Acceso al Grupo 👥",
+    "plan_basic": "Plan Básico 🔰",
+    "plan_premium": "Plan Premium ⭐", 
+    "plan_vip": "Plan VIP 👑"
+  }
+}

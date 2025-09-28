@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  subscription_telebot:
+    build: .
+    container_name: subscription_telebot
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./logs:/app/logs
+      - ./texts:/app/texts:TEXTS_AUTO_RELOAD
+    environment:
+      - PYTHONUNBUFFERED=1
+      # Configuración de textos
+      - CUSTOM_TEXTS_PATH=/app/texts/custom_texts.json
+      - GENERIC_TEXTS_PATH=/app/texts/generic_texts.json
+      - TEXTS_FALLBACK_TO_GENERIC=true
+      - TEXTS_AUTO_RELOAD=false
+      - TEXTS_ENCODING=utf-8
+      - TEXTS_VERBOSE_LOGGING=true
+    depends_on:
+      - redis
+    networks:
+      - subscription_bot_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: subscription_telebot_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - subscription_bot_network
+
+volumes:
+  redis_data:
+
+networks:
+  subscription_bot_network:
+    driver: bridge

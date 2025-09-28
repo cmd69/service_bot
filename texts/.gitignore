@@ -1,0 +1,5 @@
+# Archivos de textos personalizados - NO subir a GitHub
+custom_texts.json
+
+# Mantener solo el archivo de ejemplo
+!custom_texts.example.json

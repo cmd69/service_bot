@@ -1,0 +1,3 @@
+# JellyBot MVP - Dependencias básicas
+aiogram==3.4.1
+python-decouple==3.8
