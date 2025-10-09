@@ -25,7 +25,7 @@ subscribe_bot/
 │   ├── generic_texts.json   # Textos genéricos
 │   └── custom_texts.example.json
 ├── docs/                    # Documentación
-├── docker-compose.yml       # Docker Compose con Redis
+├── docker-compose.yml       # Docker Compose con MySQL
 ├── Dockerfile              # Imagen Docker
 ├── requirements.txt        # Dependencias
 ├── env.example            # Variables de entorno
@@ -73,9 +73,9 @@ docker-compose up --build
 - ✅ Sistema completo de gestión de suscripciones
 - ✅ Teclados interactivos con navegación
 - ✅ Sistema de textos personalizables
-- ✅ Integración con Redis para FSM
+- ✅ Sistema de base de datos MySQL
 - ✅ Configuración flexible mediante Docker Compose
-- ✅ Docker y Docker Compose con Redis
+- ✅ Docker y Docker Compose con MySQL
 - ✅ Logging estructurado
 - ✅ Documentación completa
 

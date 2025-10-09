@@ -6,7 +6,7 @@ Un bot de Telegram moderno y seguro para la gestión de suscripciones y servicio
 
 - ✅ **Gestión de Suscripciones**: Sistema completo de suscripciones premium
 - 🔐 **Verificación de Transacciones**: Soporte para BSC y TRON
-- 🛡️ **Seguridad Robusta**: Validación de datos, rate limiting, Redis
+- 🛡️ **Seguridad Robusta**: Validación de datos y autenticación segura
 - 📊 **Sistema de Textos**: Textos personalizables sin tocar código
 - 🌐 **Arquitectura Moderna**: Async/await, Docker, configuración flexible
 - 📱 **Interfaz Intuitiva**: Menús interactivos y navegación fluida
@@ -15,7 +15,7 @@ Un bot de Telegram moderno y seguro para la gestión de suscripciones y servicio
 
 ### Stack Tecnológico
 - **Framework**: aiogram 3.x (async/await)
-- **Cache**: Redis para FSM y rate limiting
+- **Base de Datos**: MySQL para persistencia de datos
 - **Validación**: Pydantic para validación robusta
 - **Contenedores**: Docker + Docker Compose
 - **Configuración**: Variables de entorno flexibles
@@ -30,7 +30,7 @@ subscribe_bot/
 │   └── main.py          # Punto de entrada
 ├── texts/               # Sistema de textos personalizables
 ├── docs/                # Documentación completa
-├── docker-compose.yml   # Configuración con Redis
+├── docker-compose.yml   # Configuración con MySQL
 └── requirements.txt     # Dependencias
 ```
 
@@ -90,7 +90,7 @@ docker-compose up -d
 
 #### Características Técnicas
 - ✅ Sistema de textos personalizables
-- ✅ Integración con Redis para FSM
+- ✅ Sistema de base de datos MySQL
 - ✅ Configuración flexible con Docker Compose
 - ✅ Teclados interactivos con navegación
 - ✅ Logging estructurado
@@ -127,7 +127,7 @@ python test_imports.py
 
 ### Características Implementadas
 - ✅ **Configuración Segura**: Variables de entorno para secrets
-- ✅ **Rate Limiting**: Con Redis para prevenir spam
+- ✅ **Autenticación**: Sistema seguro de usuarios y roles
 - ✅ **Validación de Datos**: Con Pydantic
 - ✅ **Logging Estructurado**: Para auditoría y debugging
 - ✅ **Textos Separados**: Sin hardcodeo en el código
@@ -139,7 +139,7 @@ python test_imports.py
 - Sistema completo de gestión de suscripciones
 - Teclados interactivos con navegación
 - Sistema de textos personalizables
-- Integración con Redis
+- Integración con MySQL
 - Configuración flexible con Docker Compose
 - Documentación completa
 
@@ -159,7 +159,7 @@ python test_imports.py
 4. Monitorear logs
 
 ### Escalabilidad
-- Redis para cache distribuido
+- MySQL para persistencia de datos
 - Arquitectura async para mejor rendimiento
 - Contenedores Docker para fácil escalado
 - Configuración flexible para diferentes entornos

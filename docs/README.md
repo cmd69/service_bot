@@ -33,13 +33,13 @@ Esta carpeta contiene toda la documentación detallada del proyecto Subscription
 ### Estado Actual
 - **Versión**: MVP (Etapa 1 completada)
 - **Funcionalidades**: Flujo de conversación completo
-- **Tecnologías**: aiogram 3.x, Redis, Docker, Python 3.11+
+- **Tecnologías**: aiogram 3.x, MySQL, Docker, Python 3.11+
 
 ### Características Principales
 - ✅ Sistema de suscripciones completo
 - ✅ Teclados interactivos
 - ✅ Sistema de textos personalizables
-- ✅ Integración con Redis
+- ✅ Integración con MySQL
 - ✅ Configuración flexible
 - ✅ Documentación completa
 

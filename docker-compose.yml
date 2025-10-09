@@ -26,19 +26,7 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
     depends_on:
-      - redis
       - mysql
-    networks:
-      - subscription_bot_network
-
-  redis:
-    image: redis:7-alpine
-    container_name: subscription_telebot_redis
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
     networks:
       - subscription_bot_network
 
@@ -104,7 +92,6 @@ services:
 
 
 volumes:
-  redis_data:
   mysql_data:
   dbeaver_data:
 

@@ -73,7 +73,7 @@
 - Flujo de navegación completo
 - Integración en main.py
 - Sistema de textos personalizables
-- Integración con Redis para FSM
+- Integración con MySQL para persistencia
 - Configuración flexible con Docker Compose
 - Documentación completa
 
