@@ -15,9 +15,6 @@ COPY requirements.txt .
 # Instalar dependencias de Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar código de la aplicación
-COPY app/ ./app/
-
 # Crear usuario no-root
 RUN useradd --create-home --shell /bin/bash jellybot
 RUN chown -R jellybot:jellybot /app

@@ -1,0 +1,23 @@
+{
+  "basic": {
+    "name": "Plan Básico",
+    "duration_days": 30,
+    "number_accounts": 2,
+    "price": "7.00",
+    "description": "Plan básico con 2 cuentas para 30 días"
+  },
+  "premium": {
+    "name": "Plan Premium",
+    "duration_days": 180,
+    "number_accounts": 4,
+    "price": "30.00",
+    "description": "Plan premium con 4 cuentas para 180 días"
+  },
+  "pro": {
+    "name": "Plan Pro",
+    "duration_days": 365,
+    "number_accounts": 6,
+    "price": "50.00",
+    "description": "Plan Pro con 6 cuentas para 365 días"
+  }
+}

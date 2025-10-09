@@ -13,6 +13,7 @@ from app.handlers.subscription import router as subscription_router
 from app.handlers.subscribe import router as subscribe_router
 from app.handlers.help import router as help_router
 from app.handlers.plans import router as plans_router
+from app.database.init_db import initialize_database
 
 # Configurar logging
 logging.basicConfig(
@@ -40,6 +41,11 @@ async def main():
     
     try:
         logger.info("🚀 Iniciando JellyBot MVP...")
+        
+        # Inicializar base de datos
+        logger.info("🗄️ Inicializando base de datos...")
+        initialize_database()
+        logger.info("✅ Base de datos inicializada correctamente")
         
         # Obtener información del bot
         bot_info = await bot.get_me()
