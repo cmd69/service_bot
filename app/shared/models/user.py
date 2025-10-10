@@ -15,18 +15,19 @@ if TYPE_CHECKING:
 
 class User(Base):
     """
-    User model representing users interacting via Telegram bot.
+    User model representing users in the subscription system.
     
-    Stores basic data, including unique chat_id, generated credentials,
-    and role/status flags.
+    Users can be created either through Telegram bot (with chat_id) or 
+    through the admin panel (without chat_id). Stores basic data including
+    credentials and role/status flags.
     """
     __tablename__ = "users"
 
     # Primary key
     id = Column(Integer, primary_key=True, autoincrement=True)
     
-    # Telegram integration
-    chat_id = Column(BigInteger, unique=True, nullable=False, index=True)
+    # Telegram integration (optional - if None, user was created outside Telegram)
+    chat_id = Column(BigInteger, unique=True, nullable=True, index=True)
     
     # User credentials
     name = Column(String(255), nullable=False)
@@ -58,7 +59,8 @@ class User(Base):
     )
     
     def __repr__(self) -> str:
-        return f"<User(id={self.id}, chat_id={self.chat_id}, name='{self.name}')>"
+        chat_info = f"chat_id={self.chat_id}" if self.chat_id else "no_telegram"
+        return f"<User(id={self.id}, {chat_info}, name='{self.name}')>"
     
     @property
     def active_subscription(self) -> "Subscription":
@@ -73,3 +75,7 @@ class User(Base):
     def has_active_subscription(self) -> bool:
         """Check if user has an active subscription."""
         return self.active_subscription is not None
+    
+    def is_telegram_user(self) -> bool:
+        """Check if user was created through Telegram (has chat_id)."""
+        return self.chat_id is not None

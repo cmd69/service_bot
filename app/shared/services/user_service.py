@@ -40,13 +40,17 @@ class UserService:
     @staticmethod
     def create_user(
         db: Session,
-        chat_id: int,
+        chat_id: int = None,
         name: str = None,
         password: str = None,
         is_admin: bool = False,
         is_member: bool = False
     ) -> User:
         """Create a new user."""
+        # Check if chat_id already exists (if provided)
+        if chat_id and UserService.get_user_by_chat_id(db, chat_id):
+            raise ValueError(f"User with chat_id {chat_id} already exists")
+        
         # Generate credentials if not provided
         if not name or not password:
             generated_name, generated_password = UserService.generate_credentials()
@@ -73,6 +77,31 @@ class UserService:
     def get_user_by_chat_id(db: Session, chat_id: int) -> Optional[User]:
         """Get user by Telegram chat ID."""
         return db.query(User).filter(User.chat_id == chat_id).first()
+    
+    @staticmethod
+    def get_user_by_id(db: Session, user_id: int) -> Optional[User]:
+        """Get user by ID."""
+        return db.query(User).filter(User.id == user_id).first()
+    
+    @staticmethod
+    def get_user_by_name(db: Session, name: str) -> Optional[User]:
+        """Get user by username."""
+        return db.query(User).filter(User.name == name).first()
+    
+    @staticmethod
+    def get_all_users(db: Session) -> list[User]:
+        """Get all users."""
+        return db.query(User).all()
+    
+    @staticmethod
+    def get_telegram_users(db: Session) -> list[User]:
+        """Get all users created through Telegram."""
+        return db.query(User).filter(User.chat_id.isnot(None)).all()
+    
+    @staticmethod
+    def get_non_telegram_users(db: Session) -> list[User]:
+        """Get all users created outside Telegram."""
+        return db.query(User).filter(User.chat_id.is_(None)).all()
     
     @staticmethod
     def get_admin_user(db: Session) -> Optional[User]:
