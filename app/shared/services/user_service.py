@@ -7,8 +7,8 @@ from typing import Optional
 from decouple import config
 from sqlalchemy.orm import Session
 
-from app.models import User
-from app.database import get_db
+from .. models.user import User
+from .. database.session import get_db
 
 
 class UserService:
@@ -40,13 +40,17 @@ class UserService:
     @staticmethod
     def create_user(
         db: Session,
-        chat_id: int,
+        chat_id: int = None,
         name: str = None,
         password: str = None,
         is_admin: bool = False,
         is_member: bool = False
     ) -> User:
         """Create a new user."""
+        # Check if chat_id already exists (if provided)
+        if chat_id and UserService.get_user_by_chat_id(db, chat_id):
+            raise ValueError(f"User with chat_id {chat_id} already exists")
+        
         # Generate credentials if not provided
         if not name or not password:
             generated_name, generated_password = UserService.generate_credentials()
@@ -73,6 +77,31 @@ class UserService:
     def get_user_by_chat_id(db: Session, chat_id: int) -> Optional[User]:
         """Get user by Telegram chat ID."""
         return db.query(User).filter(User.chat_id == chat_id).first()
+    
+    @staticmethod
+    def get_user_by_id(db: Session, user_id: int) -> Optional[User]:
+        """Get user by ID."""
+        return db.query(User).filter(User.id == user_id).first()
+    
+    @staticmethod
+    def get_user_by_name(db: Session, name: str) -> Optional[User]:
+        """Get user by username."""
+        return db.query(User).filter(User.name == name).first()
+    
+    @staticmethod
+    def get_all_users(db: Session) -> list[User]:
+        """Get all users."""
+        return db.query(User).all()
+    
+    @staticmethod
+    def get_telegram_users(db: Session) -> list[User]:
+        """Get all users created through Telegram."""
+        return db.query(User).filter(User.chat_id.isnot(None)).all()
+    
+    @staticmethod
+    def get_non_telegram_users(db: Session) -> list[User]:
+        """Get all users created outside Telegram."""
+        return db.query(User).filter(User.chat_id.is_(None)).all()
     
     @staticmethod
     def get_admin_user(db: Session) -> Optional[User]:
@@ -135,3 +164,53 @@ class UserService:
             print(f"Error creating admin user: {e}")
         finally:
             db.close()
+    
+    @staticmethod
+    def update_user(
+        db: Session,
+        user_id: int,
+        name: str = None,
+        password: str = None,
+        is_admin: bool = None,
+        is_member: bool = None
+    ) -> Optional[User]:
+        """Update user information."""
+        user = UserService.get_user_by_id(db, user_id)
+        if not user:
+            return None
+        
+        if name is not None:
+            user.name = name
+        if password is not None:
+            user.password = UserService.hash_password(password)
+        if is_admin is not None:
+            user.is_admin = is_admin
+        if is_member is not None:
+            user.is_member = is_member
+        
+        db.commit()
+        db.refresh(user)
+        return user
+    
+    @staticmethod
+    def delete_user(db: Session, user_id: int) -> bool:
+        """Delete a user."""
+        user = UserService.get_user_by_id(db, user_id)
+        if not user:
+            return False
+        
+        db.delete(user)
+        db.commit()
+        return True
+    
+    @staticmethod
+    def toggle_user_membership(db: Session, user_id: int) -> Optional[User]:
+        """Toggle user membership status."""
+        user = UserService.get_user_by_id(db, user_id)
+        if not user:
+            return None
+        
+        user.is_member = not user.is_member
+        db.commit()
+        db.refresh(user)
+        return user

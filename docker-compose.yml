@@ -12,12 +12,12 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
       # Configuración de textos
-      - CUSTOM_TEXTS_PATH=/app/texts/custom_texts.json
-      - GENERIC_TEXTS_PATH=/app/texts/generic_texts.json
-      - TEXTS_FALLBACK_TO_GENERIC=true
-      - TEXTS_AUTO_RELOAD=false
-      - TEXTS_ENCODING=utf-8
-      - TEXTS_VERBOSE_LOGGING=true
+      - CUSTOM_TEXTS_PATH=${CUSTOM_TEXTS_PATH}
+      - GENERIC_TEXTS_PATH=${GENERIC_TEXTS_PATH}
+      - TEXTS_FALLBACK_TO_GENERIC=${TEXTS_FALLBACK_TO_GENERIC}
+      - TEXTS_AUTO_RELOAD=${TEXTS_AUTO_RELOAD}
+      - TEXTS_ENCODING=${TEXTS_ENCODING}
+      - TEXTS_VERBOSE_LOGGING=${TEXTS_VERBOSE_LOGGING}
       # Configuración de base de datos
       - DATABASE_URL=${DATABASE_URL}
       - DB_HOST=${DB_HOST}
@@ -32,7 +32,7 @@ services:
 
   mysql:
     image: mysql:8.0
-    container_name: subscription_telebot_mysql
+    container_name: mysql
     restart: unless-stopped
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}

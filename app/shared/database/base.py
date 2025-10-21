@@ -47,7 +47,11 @@ def init_db() -> None:
     Initialize database tables.
     """
     # Import all models to ensure they are registered with Base
-    from app.models import User, Plan, Subscription, Transaction, Wallet
+    from .. models.user import User
+    from .. models.plan import Plan
+    from .. models.subscription import Subscription
+    from .. models.transaction import Transaction
+    from .. models.wallet import Wallet
     
     # Create all tables
     Base.metadata.create_all(bind=engine)

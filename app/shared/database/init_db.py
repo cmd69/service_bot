@@ -1,8 +1,10 @@
 """
 Database initialization script.
 """
-from app.database.base import init_db
-from app.services import WalletService, UserService, PlanService
+from .. database.base import init_db
+from .. services.wallet_service import WalletService
+from .. services.user_service import UserService
+from .. services.plan_service import PlanService
 
 
 def initialize_wallets():

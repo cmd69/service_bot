@@ -7,8 +7,8 @@ from typing import List, Dict, Any
 from decouple import config
 from sqlalchemy.orm import Session
 
-from app.models import Plan
-from app.database import get_db
+from .. models.plan import Plan
+from .. database.session import get_db
 
 
 class PlanService:
@@ -22,6 +22,10 @@ class PlanService:
         # Try to load from JSON file first
         plans_config_file = config("PLANS_CONFIG_FILE", default="")
         if plans_config_file:
+            # If no path is specified, look in the texts directory
+            if not plans_config_file.startswith('/') and not plans_config_file.startswith('./'):
+                plans_config_file = f"/app/texts/{plans_config_file}"
+            
             try:
                 with open(plans_config_file, 'r', encoding='utf-8') as f:
                     plans_data = json.load(f)

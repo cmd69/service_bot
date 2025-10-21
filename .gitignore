@@ -69,3 +69,6 @@ texts/custom_texts.json
 
 # Archivos privados de desarrollo
 .progress.md
+
+# Repositorio privado de administración
+jelly_admin/

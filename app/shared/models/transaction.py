@@ -6,7 +6,7 @@ from typing import Optional, Dict, Any, TYPE_CHECKING
 from sqlalchemy import Column, Integer, ForeignKey, String, DECIMAL, DateTime, Enum, JSON, func, Index
 from sqlalchemy.orm import relationship, Mapped
 
-from app.database.base import Base
+from .. database.base import Base
 from .enums import TransactionType, TransactionStatus
 
 if TYPE_CHECKING:

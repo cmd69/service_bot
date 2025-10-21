@@ -6,7 +6,7 @@ from typing import List, TYPE_CHECKING
 from sqlalchemy import Column, Integer, ForeignKey, DateTime, Enum, func, Index
 from sqlalchemy.orm import relationship, Mapped
 
-from app.database.base import Base
+from .. database.base import Base
 from .enums import SubscriptionStatus
 
 if TYPE_CHECKING:

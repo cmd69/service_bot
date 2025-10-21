@@ -13,7 +13,7 @@ from app.handlers.subscription import router as subscription_router
 from app.handlers.subscribe import router as subscribe_router
 from app.handlers.help import router as help_router
 from app.handlers.plans import router as plans_router
-from app.database.init_db import initialize_database
+from app.shared.database.init_db import initialize_database
 
 # Configurar logging
 logging.basicConfig(

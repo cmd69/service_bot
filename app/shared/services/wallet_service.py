@@ -6,8 +6,9 @@ from typing import List, Optional
 from decouple import config
 from sqlalchemy.orm import Session
 
-from app.models import Wallet, TransactionType
-from app.database import get_db
+from ..models.wallet import Wallet
+from ..models.enums import TransactionType
+from ..database.session import get_db
 
 # TODO Check if we actually need all this logic, we just want to setup wallet addresses on .env and get them added to sql
 class WalletService:

@@ -7,7 +7,7 @@ from typing import List, TYPE_CHECKING
 from sqlalchemy import Column, Integer, String, Text, DECIMAL, DateTime, func, CheckConstraint
 from sqlalchemy.orm import relationship, Mapped
 
-from app.database.base import Base
+from .. database.base import Base
 
 if TYPE_CHECKING:
     from .subscription import Subscription

@@ -5,7 +5,7 @@ from typing import List, TYPE_CHECKING
 from sqlalchemy import Column, Integer, String, Boolean, DateTime, Enum, func, Index
 from sqlalchemy.orm import relationship, Mapped
 
-from app.database.base import Base
+from .. database.base import Base
 from .enums import TransactionType
 
 if TYPE_CHECKING:
