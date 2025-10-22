@@ -206,11 +206,49 @@ class UserService:
     @staticmethod
     def toggle_user_membership(db: Session, user_id: int) -> Optional[User]:
         """Toggle user membership status."""
+        print(f"Toggling membership for user {user_id}")
+        user = UserService.get_user_by_id(db, user_id)
+        if not user:
+            print(f"User {user_id} not found")
+            return None
+        
+        print(f"Current membership status: {user.is_member}")
+        user.is_member = not user.is_member
+        print(f"New membership status: {user.is_member}")
+        
+        try:
+            db.commit()
+            db.refresh(user)
+            print(f"Membership toggle successful for user {user_id}")
+            return user
+        except Exception as e:
+            print(f"Error toggling membership: {e}")
+            db.rollback()
+            return None
+    
+    @staticmethod
+    def get_member_users(db: Session) -> list[User]:
+        """Get all member users (is_member=True)."""
+        return db.query(User).filter(User.is_member == True).all()
+    
+    @staticmethod
+    def get_non_member_users(db: Session) -> list[User]:
+        """Get all non-member users (is_member=False)."""
+        return db.query(User).filter(User.is_member == False).all()
+    
+    @staticmethod
+    def update_user_chat_id(db: Session, user_id: int, chat_id: int) -> Optional[User]:
+        """Update user's chat_id."""
         user = UserService.get_user_by_id(db, user_id)
         if not user:
             return None
         
-        user.is_member = not user.is_member
+        # Check if chat_id is already in use by another user
+        existing_user = UserService.get_user_by_chat_id(db, chat_id)
+        if existing_user and existing_user.id != user_id:
+            raise ValueError(f"Chat ID {chat_id} is already in use by another user")
+        
+        user.chat_id = chat_id
         db.commit()
         db.refresh(user)
         return user
