@@ -1,7 +1,7 @@
 services:
-  subscription_telebot:
+  servicebot:
     build: .
-    container_name: subscription_telebot
+    container_name: servicebot
     restart: unless-stopped
     env_file:
       - .env
@@ -26,13 +26,13 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
     depends_on:
-      - mysql
+      - servicebot_mysql
     networks:
-      - subscription_bot_network
+      - servicebot_network
 
-  mysql:
+  servicebot_mysql:
     image: mysql:8.0
-    container_name: mysql
+    container_name: servicebot_mysql
     restart: unless-stopped
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
@@ -42,17 +42,17 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - servicebot_mysql_data:/var/lib/mysql
       - ./mysql/init:/docker-entrypoint-initdb.d
     networks:
-      - subscription_bot_network
+      - servicebot_network
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: subscription_telebot_phpmyadmin
+    container_name: servicebot_phpmyadmin
     restart: unless-stopped
     environment:
-      - PMA_HOST=mysql
+      - PMA_HOST=servicebot_mysql
       - PMA_PORT=3306
       - PMA_USER=${MYSQL_USER}
       - PMA_PASSWORD=${MYSQL_PASSWORD}
@@ -60,13 +60,13 @@ services:
     ports:
       - "8080:80"
     depends_on:
-      - mysql
+      - servicebot_mysql
     networks:
-      - subscription_bot_network
+      - servicebot_network
 
   dbeaver:
     image: dbeaver/cloudbeaver:ea
-    container_name: subscription_telebot_dbeaver
+    container_name: servicebot_dbeaver
     restart: unless-stopped
     ports:
       - "8081:8978"
@@ -76,25 +76,25 @@ services:
       - CB_ADMIN_NAME=${DBEAVER_ADMIN_NAME}
       - CB_ADMIN_PASSWORD=${DBEAVER_ADMIN_PASSWORD}
       # Configuración de base de datos
-      - CB_DATABASE_URL=jdbc:mysql://mysql:3306/${MYSQL_DATABASE}
+      - CB_DATABASE_URL=jdbc:mysql://servicebot_mysql:3306/${MYSQL_DATABASE}
       - CB_DATABASE_USER=${MYSQL_USER}
       - CB_DATABASE_PASSWORD=${MYSQL_PASSWORD}
       - CB_DATABASE_DRIVER=mysql
       # Configuración adicional
-      - CB_SERVER_NAME=JellyBot Database
+      - CB_SERVER_NAME=ServiceBot Database
       - CB_SERVER_URL=http://localhost:8081
     volumes:
-      - dbeaver_data:/opt/cloudbeaver/workspace
+      - servicebot_dbeaver_data:/opt/cloudbeaver/workspace
     depends_on:
-      - mysql
+      - servicebot_mysql
     networks:
-      - subscription_bot_network
+      - servicebot_network
 
 
 volumes:
-  mysql_data:
-  dbeaver_data:
+  servicebot_mysql_data:
+  servicebot_dbeaver_data:
 
 networks:
-  subscription_bot_network:
+  servicebot_network:
     driver: bridge
