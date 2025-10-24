@@ -43,6 +43,7 @@ class UserService:
         chat_id: int = None,
         name: str = None,
         password: str = None,
+        phone: str = None,
         is_admin: bool = False,
         is_member: bool = False
     ) -> User:
@@ -64,6 +65,7 @@ class UserService:
             chat_id=chat_id,
             name=name,
             password=hashed_password,
+            phone=phone,
             is_admin=is_admin,
             is_member=is_member
         )
@@ -252,3 +254,101 @@ class UserService:
         db.commit()
         db.refresh(user)
         return user
+    
+    @staticmethod
+    def disable_expired_memberships(db: Session, jellyfin_service=None) -> dict:
+        """
+        Disable memberships for users with expired subscriptions and no other active plans.
+        Also disables the user in Jellyfin if exists.
+        
+        Returns:
+            dict with 'disabled_count', 'disabled_users', 'jellyfin_disabled', and 'errors'
+        """
+        from datetime import datetime
+        from ..models.subscription import Subscription, SubscriptionStatus
+        
+        # Get users with expired active subscriptions
+        expired_subscriptions = db.query(Subscription).filter(
+            Subscription.status == SubscriptionStatus.ACTIVE,
+            Subscription.end_date < datetime.utcnow()
+        ).all()
+        
+        disabled_count = 0
+        disabled_users = []
+        jellyfin_disabled = []
+        errors = []
+        
+        for subscription in expired_subscriptions:
+            # Mark subscription as expired
+            subscription.status = SubscriptionStatus.EXPIRED
+            
+            user = UserService.get_user_by_id(db, subscription.user_id)
+            if user and user.is_member:
+                # Check if user has any other active subscription
+                now = datetime.utcnow()
+                has_other_active = db.query(Subscription).filter(
+                    Subscription.user_id == user.id,
+                    Subscription.id != subscription.id,
+                    Subscription.status == SubscriptionStatus.ACTIVE,
+                    Subscription.start_date <= now,
+                    Subscription.end_date >= now
+                ).first() is not None
+                
+                # Only disable membership if no other active subscription exists
+                if not has_other_active:
+                    user.is_member = False
+                    disabled_count += 1
+                    disabled_users.append(user.name)
+                    
+                    # Try to disable in Jellyfin if service is provided
+                    if jellyfin_service:
+                        try:
+                            print(f"[DEBUG] Intentando desactivar usuario '{user.name}' en Jellyfin...")
+                            
+                            # Get Jellyfin user by username (force refresh to ensure fresh data)
+                            jellyfin_users = jellyfin_service.get_all_users(force_refresh=True)
+                            print(f"[DEBUG] Total usuarios en Jellyfin: {len(jellyfin_users) if jellyfin_users else 0}")
+                            
+                            jellyfin_user = next(
+                                (jf_user for jf_user in (jellyfin_users or []) 
+                                 if jf_user.get('Name') == user.name),
+                                None
+                            )
+                            
+                            if jellyfin_user:
+                                user_id = jellyfin_user.get('Id')
+                                print(f"[DEBUG] Usuario '{user.name}' encontrado en Jellyfin con ID: {user_id}")
+                                print(f"[DEBUG] Estado actual IsDisabled: {jellyfin_user.get('Policy', {}).get('IsDisabled', False)}")
+                                
+                                success = jellyfin_service.disable_user(user_id)
+                                print(f"[DEBUG] Resultado de desactivación: {success}")
+                                
+                                if success:
+                                    jellyfin_disabled.append(user.name)
+                                    print(f"[SUCCESS] Usuario '{user.name}' desactivado en Jellyfin")
+                                    
+                                    # Invalidate cache after successful disable
+                                    jellyfin_service.cache_service.clear_jellyfin_users()
+                                else:
+                                    error_msg = f"No se pudo desactivar {user.name} en Jellyfin (API retornó False)"
+                                    print(f"[ERROR] {error_msg}")
+                                    errors.append(error_msg)
+                            else:
+                                print(f"[WARNING] Usuario '{user.name}' no encontrado en Jellyfin")
+                                # No agregamos error si no existe en Jellyfin, es esperado
+                        except Exception as e:
+                            error_msg = f"Error desactivando {user.name} en Jellyfin: {str(e)}"
+                            print(f"[ERROR] {error_msg}")
+                            import traceback
+                            traceback.print_exc()
+                            errors.append(error_msg)
+        
+        if disabled_count > 0 or expired_subscriptions:
+            db.commit()
+        
+        return {
+            'disabled_count': disabled_count,
+            'disabled_users': disabled_users,
+            'jellyfin_disabled': jellyfin_disabled,
+            'errors': errors
+        }

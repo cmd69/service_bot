@@ -33,6 +33,10 @@ class SubscriptionService:
         
         end_date = plan.calculate_end_date(start_date)
         
+        # Check for overlapping subscriptions
+        if SubscriptionService.check_subscription_overlap(db, user_id, start_date, end_date):
+            return None  # Overlap detected
+        
         subscription = Subscription(
             user_id=user_id,
             plan_id=plan_id,
@@ -58,6 +62,30 @@ class SubscriptionService:
             Subscription.user_id == user_id,
             Subscription.status == SubscriptionStatus.ACTIVE
         ).first()
+    
+    @staticmethod
+    def get_subscription_to_display(db: Session, user_id: int) -> Optional[Subscription]:
+        """
+        Get subscription to display for a user.
+        Returns active subscription if exists, otherwise returns the most recent expired subscription.
+        This allows viewing the last plan info even after membership expiration.
+        """
+        # First try to get active subscription
+        active_subscription = db.query(Subscription).filter(
+            Subscription.user_id == user_id,
+            Subscription.status == SubscriptionStatus.ACTIVE
+        ).first()
+        
+        if active_subscription:
+            return active_subscription
+        
+        # If no active subscription, get the most recent expired one
+        last_expired = db.query(Subscription).filter(
+            Subscription.user_id == user_id,
+            Subscription.status == SubscriptionStatus.EXPIRED
+        ).order_by(Subscription.end_date.desc()).first()
+        
+        return last_expired
     
     @staticmethod
     def get_all_plans(db: Session) -> List[Plan]:
@@ -144,6 +172,12 @@ class SubscriptionService:
         if not subscription:
             return False
         
+        # Check for overlapping subscriptions (excluding current one)
+        if SubscriptionService.check_subscription_overlap(
+            db, subscription.user_id, start_date, end_date, subscription_id
+        ):
+            return False  # Overlap detected
+        
         subscription.start_date = start_date
         subscription.end_date = end_date
         db.commit()
@@ -159,3 +193,30 @@ class SubscriptionService:
         db.delete(subscription)
         db.commit()
         return True
+    
+    @staticmethod
+    def check_subscription_overlap(
+        db: Session, 
+        user_id: int, 
+        start_date: datetime, 
+        end_date: datetime, 
+        exclude_subscription_id: int = None
+    ) -> bool:
+        """Check if a subscription period overlaps with existing subscriptions."""
+        query = db.query(Subscription).filter(
+            Subscription.user_id == user_id,
+            Subscription.status == SubscriptionStatus.ACTIVE
+        )
+        
+        # Exclude the subscription being edited
+        if exclude_subscription_id:
+            query = query.filter(Subscription.id != exclude_subscription_id)
+        
+        existing_subscriptions = query.all()
+        
+        for subscription in existing_subscriptions:
+            # Check for overlap: new start < existing end AND new end > existing start
+            if start_date < subscription.end_date and end_date > subscription.start_date:
+                return True
+        
+        return False

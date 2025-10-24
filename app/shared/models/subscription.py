@@ -77,9 +77,10 @@ class Subscription(Base):
     
     @property
     def days_remaining(self) -> int:
-        """Get number of days remaining in subscription."""
-        if self.is_expired:
-            return 0
+        """
+        Get number of days remaining in subscription.
+        Returns positive number if active, negative if expired (to show how many days ago it expired).
+        """
         return (self.end_date - datetime.utcnow()).days
     
     def expire(self) -> None:

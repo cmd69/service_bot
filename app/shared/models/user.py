@@ -40,6 +40,7 @@ class User(Base, UserMixin):
     # User credentials
     name = Column(String(255), nullable=False)
     password = Column(String(255), nullable=False)  # Should be hashed
+    phone = Column(String(20), nullable=True)  # Optional phone number
     
     # Role and status flags
     is_admin = Column(Boolean, default=False, nullable=False)
