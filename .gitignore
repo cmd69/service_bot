@@ -203,3 +203,6 @@ texts/custom_texts.json
 
 # Repositorio privado de administración
 jelly_admin/
+
+# Docker Compose de desarrollo (no subir a git - solo producción)
+docker-compose.override.yml
